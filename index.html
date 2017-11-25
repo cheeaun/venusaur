@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Venusaur - iCal as a Service</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css">
+<style>
+  #preview,
+  #downloadical {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  footer {
+    background-color: whitesmoke;
+    padding: 3rem 1.5rem;
+  }
+</style>
+<script>
+  function onloadIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+    var url = obj.contentWindow.location.href;
+    if (/^http/i.test(url)){
+      url = url.replace(/&plain=?/, '');
+      document.getElementById('downloadical').innerHTML = '<div class="field has-addons">'
+        + '<div class="control is-expanded">'
+          + '<input class="input" value="' + url + '" readonly>'
+        + '</div>'
+        + '<div class="control">'
+          + '<a href="' + url + '" target="_venusaur" class="button is-link">Download iCal</a>'
+        + '</div>'
+      + '</div>';
+    }
+  }
+</script>
+<section class="hero is-primary is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <header>
+        <h1 class="title">Venusaur</h1>
+        <p class="subtitle">iCal as a Service</p>
+      </header>
+    </div>
+  </div>
+</section>
+<section class="section">
+    <div class="columns">
+      <div class="column is-6">
+        <form method="GET" action="/ical/" target="ical_iframe" id="ical" name="venuform">
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Start date</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input name="start" class="input is-primary" type="text" required>
+                </div>
+                <p class="help"><b>Required.</b> E.g.: <samp>2017-11-04T10:30:00+08:00</samp></p>
+              </div>
+            </div>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">End date</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input name="end" class="input" type="text">
+                </div>
+                <p class="help">E.g.: <samp>2017-11-04T13:30:00+08:00</samp></p>
+              </div>
+            </div>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Timezone</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input name="timezone" class="input" type="text">
+                </div>
+                <p class="help">E.g.: <samp>Asia/Singapore</samp></p>
+              </div>
+            </div>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Summary</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input name="summary" class="input" type="text">
+                </div>
+                <p class="help">E.g.: <samp>Wonderful Conference</samp></p>
+              </div>
+            </div>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Description</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <textarea name="description" class="textarea" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Location</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input name="location" class="input" type="text">
+                </div>
+                <p class="help">E.g.: <samp>50 California St, San Francisco, CA 94111, USA</samp></p>
+              </div>
+            </div>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">URL</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input name="url" class="input" type="url" placeholder="https://">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-label">
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <button class="button is-primary" name="plain">
+                    Preview
+                  </button>
+                  <button type="button" class="button is-text" id="example">
+                    Show example?
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="column is-6">
+        <div class="panel">
+          <p class="panel-heading">
+            iCal Preview
+          </p>
+          <div class="panel-block" id="preview">
+            <iframe height="100%" name="ical_iframe" frameborder="0" scrolling="no" onload="onloadIframe(this);"></iframe>
+          </div>
+          <div class="panel-block" id="downloadical"></div>
+        </div>
+      </div>
+    </div>
+</section>
+<footer>
+  <div class="container">
+    <p>
+      Yet another tiny side project by <a href="https://twitter.com/cheeaun">@cheeaun</a>. <a href="https://glitch.com/edit/#!/remix/venusaur">Remix on Glitch</a>.
+    </p>
+  </div>
+</footer>
+<script>
+  document.getElementById('example').onclick = function(){
+    document.querySelector('[name=start]').value = '2017-11-04T10:30:00+08:00';
+    document.querySelector('[name=end]').value = '2017-11-04T13:30:00+08:00';
+    document.querySelector('[name=timezone]').value = 'Asia/Singapore';
+    document.querySelector('[name=summary]').value = 'Wonderful Conference';
+    document.querySelector('[name=description]').value = 'Wonderful description';
+    document.querySelector('[name=location]').value = '50 California St, San Francisco, CA 94111, USA';
+    document.querySelector('[name=url]').value = 'http://google.com';
+    document.querySelector('[name=plain]').click();
+  }
+</script>

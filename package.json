@@ -1,0 +1,17 @@
+{
+  "name": "venusaur",
+  "version": "0.0.1",
+  "description": "iCal as a Service (iCalaaS)",
+  "main": "server.js",
+  "scripts": {
+    "start": "micro"
+  },
+  "dependencies": {
+    "ical-generator": "~0.2.10",
+    "micro": "~9.0.2"
+  },
+  "engines": {
+    "node": "8.x"
+  },
+  "license": "MIT"
+}
